@@ -9,6 +9,15 @@ const Home = () => {
         <div className='header'>
             <Image src={logo} alt="Placeam Logo"/>
         </div>
+        <div className='hero-section'>
+            <div class="hero-overlay">
+                <h1>
+                    Experience the Future of 
+                    Luxury Fashion Resale with 
+                    Placeam
+                </h1>
+            </div>
+        </div>
     </section>
   )
 };
