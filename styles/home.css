@@ -3,6 +3,7 @@
     padding:0px;
     box-sizing: border-box;
 }
-.main{
-    background-color: aqua;
+.header{
+    background-color: black;
+    padding:1% 3%;
 }
