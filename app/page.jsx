@@ -9,6 +9,9 @@ import { FaInstagram, FaFacebookF } from "react-icons/fa";
 
 const Home = () => {
   const [isActive, setIsActive ] = useState(true);
+  const [ email, setEmail ] = useState({
+    email: ""
+  })
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,6 +22,33 @@ const Home = () => {
         clearInterval(interval)
       }
   }, [isActive])
+
+  const handleChange = (e) => {
+    const { value } = e.target
+
+    setEmail({
+        email : value
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    try{    
+        const res = await fetch("/api/waitlist", {
+            method: "POST",
+            body: JSON.stringify({
+                email: email
+            })
+        })
+
+        console.log(res)
+
+    }catch (error) {
+        console.log(error)
+    }
+    setEmail({email:""});
+  }
 
   return (
         <section className='main'>
@@ -60,7 +90,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <form className='waitlist-form'>
+            <form className='waitlist-form' onSubmit={handleSubmit}>
                 <h1>Join the Waitlist</h1>
                 <p>
                     Buy, sell, and donate high-end fashion effortlessly. 
@@ -68,7 +98,7 @@ const Home = () => {
                     join the waitlist now!
                 </p>
                 <div className="input-box">
-                    <input type="email" placeholder='sample@gmail.com'/>
+                    <input type="email" value={email.email} placeholder='sample@gmail.com' onChange={(e) => handleChange(e)} required/>
                     <button type="submit"> Join waitlist</button>
                 </div>
             </form>
