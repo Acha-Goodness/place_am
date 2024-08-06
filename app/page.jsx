@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 import "@styles/home.css";
 import Image from 'next/image';
 import logo from "@assets/images/placeam_logo.png";
+import comingSoon from "@assets/images/comingSoon.png";
 import phone from "@assets/images/phone.png";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaInstagram, FaFacebookF } from "react-icons/fa";
 
 const Home = () => {
-  const [isActive, setIsActive ] = useState(true);
+  const [ isActive, setIsActive ] = useState(true);
+  const [ showComingSoon, setShowComingSoon ] = useState(true);
   const [ email, setEmail ] = useState({
     email: ""
   })
@@ -31,14 +33,24 @@ const Home = () => {
     })
   }
 
+  useEffect(() => {
+    const comingInterval = setInterval(() => {
+        setShowComingSoon(!showComingSoon)
+    }, 4000)
+
+    return () => {
+        clearInterval(comingInterval)
+    }
+  }, [showComingSoon])
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try{    
         const res = await fetch("/api/waitlist", {
             method: "POST",
-            body: JSON.stringify({
-                email: email
+            body:JSON.stringify({
+                email: email.email
             })
         })
 
@@ -54,6 +66,7 @@ const Home = () => {
         <section className='main'>
             <div className='header'>
                 <Image src={logo} className='logo' alt="Placeam Logo"/>
+                <Image src={comingSoon} className={showComingSoon ? "comingSoon" : "disableComingSoon"} alt="Coming-Soon"/>
             </div>
             <div className='hero-section'>
                 <div className="hero-overlay">
