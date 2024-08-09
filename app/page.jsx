@@ -1,16 +1,21 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import "@styles/home.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Image from 'next/image';
 import logo from "@assets/images/placeam_logo.png";
 import comingSoon from "@assets/images/comingSoon.png";
 import phone from "@assets/images/phone.png";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaInstagram, FaFacebookF } from "react-icons/fa";
+import { ThreeDots } from 'react-loader-spinner';
+
 
 const Home = () => {
   const [ isActive, setIsActive ] = useState(true);
   const [ showComingSoon, setShowComingSoon ] = useState(true);
+  const [ loader, setLoader ] = useState(false);
   const [ email, setEmail ] = useState({
     email: ""
   })
@@ -45,25 +50,27 @@ const Home = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try{    
-        const res = await fetch("/api/waitlist", {
-            method: "POST",
-            body:JSON.stringify({
-                email: email.email
-            })
+    setLoader(true)
+
+    fetch("/api/waitlist", {
+        method: "POST",
+        body:JSON.stringify({
+            email: email.email
         })
-
-        console.log(res)
-
-    }catch (error) {
-        console.log(error)
-    }
-    setEmail({email:""});
+    }).then(data => {
+        toast("You have been added to the waiting list")
+        setEmail({email:""});
+        setLoader(false)
+    }).catch(error => {
+        console.error('Error:', error);
+        toast("Failed to add you to the waiting list, TRY AGAIN LATER")
+        setLoader(false)
+    })  
   }
 
   return (
         <section className='main'>
+            <ToastContainer/>
             <div className='header'>
                 <Image src={logo} className='logo' alt="Placeam Logo"/>
                 <Image src={comingSoon} className={showComingSoon ? "comingSoon" : "disableComingSoon"} alt="Coming-Soon"/>
@@ -112,7 +119,19 @@ const Home = () => {
                 </p>
                 <div className="input-box">
                     <input type="email" value={email.email} placeholder='sample@gmail.com' onChange={(e) => handleChange(e)} required/>
-                    <button type="submit"> Join waitlist</button>
+                    <button type="submit">{loader ?
+                        <ThreeDots
+                            visible={true}
+                            height="20"
+                            width="40"
+                            color="#000000"
+                            radius="9"
+                            ariaLabel="three-dots-loading"
+                        /> 
+                        : 
+                        "Join waitlist"
+                    }
+                    </button>
                 </div>
             </form>
             <div className='social-icons'>

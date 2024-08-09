@@ -7,5 +7,8 @@
 }
 body{
     background-color: black;
-    overflow-x: hidden;
+}
+main{
+    position: relative;
+    overflow-x: hidden !important;
 }
